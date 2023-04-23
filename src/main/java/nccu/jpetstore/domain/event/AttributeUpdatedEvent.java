@@ -1,26 +1,37 @@
 package nccu.jpetstore.domain.event;
 
-import java.util.Map;
+public class AttributeUpdatedEvent extends DomainEvent {
+    // private Map.Entry<String, Object> entry;
 
-public class AttributeUpdatedEvent<T> extends DomainEvent<T>  {
+    private String name;
+    private Object value;
 
-    private Map.Entry<String, Object> entry;
-
-    public AttributeUpdatedEvent(T entity, Map.Entry<String, Object> update, long timestamp) {
-        super(entity, timestamp);
-        entry = update;
+    public AttributeUpdatedEvent(String id, String entityType, long timestamp) {
+        super(id, entityType, timestamp);
     }
 
-    public Map.Entry<String, Object> getUpdate() {
-        return entry;
+    public String getName() {
+        return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
 
     public String toString() {
         return "EntityUpdatedEvent{" +
-                "entity=" + this.getEntity() +
+                "entity=" + this.getEntityType() +
                 ", timestamp=" + this.getTimestamp() +
-                ", update=" + this.getUpdate() +
+                ", name=" + this.getName() +
+                ", value=" + this.getValue() +
                 '}';
     }
 

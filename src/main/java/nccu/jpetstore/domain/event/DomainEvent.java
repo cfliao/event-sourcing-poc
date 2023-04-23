@@ -1,16 +1,22 @@
 package nccu.jpetstore.domain.event;
 
-public abstract class DomainEvent<T> {
-    private String entity;
+public abstract class DomainEvent {
+    private String entityType;
     private long timestamp;
+    private String id;
 
-    public DomainEvent(T entity, long timestamp) {
-        this.entity = entity.getClass().getName();
+    public DomainEvent(String id, String entityType, long timestamp) {
+        this.entityType = entityType;
         this.timestamp = timestamp;
+        this.id = id;
     }
 
-    public String getEntity() {
-        return entity;
+    public String getId() {
+        return id;
+    }
+
+    public String getEntityType() {
+        return entityType;
     }
 
     public long getTimestamp() {
@@ -19,7 +25,7 @@ public abstract class DomainEvent<T> {
 
     public java.lang.String toString() {
         return "DomainEvent{" +
-                "entity=" + entity +
+                "entity=" + entityType +
                 ", timestamp=" + timestamp +
                 '}';
     }

@@ -3,12 +3,12 @@ package nccu.jpetstore.domain.event;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EntityUpdatedEvent<T> extends DomainEvent<T> {
+public class EntityUpdatedEvent extends DomainEvent {
 
     private Map<String, Object> updates;
 
-    public EntityUpdatedEvent(T entity, long timestamp) {
-        super(entity, timestamp);
+    public EntityUpdatedEvent(String uuid, String entity, long timestamp) {
+        super(uuid, entity, timestamp);
         updates = new HashMap<>();
     }
 

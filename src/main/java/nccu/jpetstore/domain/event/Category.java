@@ -1,9 +1,6 @@
 package nccu.jpetstore.domain.event;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 // 載入串流;特定版本
 // 做event store
@@ -13,21 +10,33 @@ public class Category {
     private String name;
     private String description;
 
-    private List<DomainEvent<Category>> eventStore;
+    private List<DomainEvent> eventCache;
 
     public Category() {
-        eventStore = new ArrayList<>();
-        cause(new EntityCreatedEvent(this, new Date().getTime()));
+        eventCache = new ArrayList<>();
+        categoryId = UUID.randomUUID().toString();
+        cause(new EntityCreatedEvent(getStreamId(), Category.class.getName(), new Date().getTime()));
     }
 
     public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
-        AttributeUpdatedEvent<Category> event =
-                new AttributeUpdatedEvent<>(this, new AbstractMap.SimpleEntry<>("categoryId", categoryId), new Date().getTime());
-        cause(event);
+//    public void setCategoryId(String categoryId) {
+//        AttributeUpdatedEvent event = generateAttributeUpdatedEvent("categoryId", categoryId);
+//        cause(event);
+//    }
+
+    private AttributeUpdatedEvent generateAttributeUpdatedEvent(String key, Object value) {
+        AttributeUpdatedEvent event =
+                new AttributeUpdatedEvent(getStreamId(), Category.class.getName(), new Date().getTime());
+        event.setName(key);
+        event.setValue(value);
+        return event;
+    }
+
+    private String getStreamId() {
+        return Category.class.getName() + "-" + categoryId;
     }
 
     public String getName() {
@@ -35,8 +44,7 @@ public class Category {
     }
 
     public void setName(String name) {
-        AttributeUpdatedEvent<Category> event =
-                new AttributeUpdatedEvent<>(this, new AbstractMap.SimpleEntry<>("name", name), new Date().getTime());
+        AttributeUpdatedEvent event = generateAttributeUpdatedEvent("name", name);
         cause(event);
     }
 
@@ -45,21 +53,20 @@ public class Category {
     }
 
     public void setDescription(String description) {
-        AttributeUpdatedEvent<Category> event =
-                new AttributeUpdatedEvent<>(this, new AbstractMap.SimpleEntry<>("description", description), new Date().getTime());
-       cause(event);
+        AttributeUpdatedEvent event = generateAttributeUpdatedEvent("description", description);
+        cause(event);
     }
 
-    private void cause(DomainEvent<Category> event) {
+    private void cause(DomainEvent event) {
         mutate(event);
-        eventStore.add(event);
+        eventCache.add(event);
     }
 
-    private void mutate(DomainEvent<Category> event) {
+    private void mutate(DomainEvent event) {
         if (event instanceof EntityCreatedEvent) {
             // applyCreatedEvent((EntityCreatedEvent<Category>) event);
         } else if (event instanceof AttributeUpdatedEvent) {
-            applyUpdatedEvent((AttributeUpdatedEvent<Category>) event);
+            applyUpdatedEvent((AttributeUpdatedEvent) event);
         } else throw new IllegalArgumentException();
 
     }
@@ -70,16 +77,13 @@ public class Category {
 //        this.description = event.getEntity().getDescription();
 //    }
 
-    private void applyUpdatedEvent(AttributeUpdatedEvent<Category> event) {
-        switch (event.getUpdate().getKey()) {
-            case "categoryId":
-                this.categoryId = (String) event.getUpdate().getValue();
-                break;
+    private void applyUpdatedEvent(AttributeUpdatedEvent event) {
+        switch (event.getName()) {
             case "name":
-                this.name = (String) event.getUpdate().getValue();
+                this.name = (String) event.getValue();
                 break;
             case "description":
-                this.description = (String) event.getUpdate().getValue();
+                this.description = (String) event.getValue();
                 break;
         }
     }
@@ -90,11 +94,11 @@ public class Category {
 //    }
 
     public void reset() {
-        eventStore.clear();
+        eventCache.clear();
     }
 
-    public List<DomainEvent<Category>> getEvents() {
-        return eventStore;
+    public List<DomainEvent> getEvents() {
+        return eventCache;
     }
 
 
