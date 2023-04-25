@@ -4,7 +4,7 @@ import com.eventstore.dbclient.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class CategoryRepository {
+public class CategoryEventStoreTest {
 
     public static void main(String[] args) throws Exception {
         EventStoreDBClientSettings settings = EventStoreDBConnectionString.parse("esdb://127.0.0.1:2113?tls=false&keepAliveTimeout=10000&keepAliveInterval=10000");
