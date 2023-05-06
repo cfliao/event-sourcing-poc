@@ -25,14 +25,14 @@ public class CategoryEventStoreTest {
                     .builderAsJson(e.getClass().getName(), e)
                     .build();
             //System.out.println(e.getId());
-            client.appendToStream(e.getId(), eventData).get();
+            client.appendToStream(e.getStreamId(), eventData).get();
             //System.out.println(eventData);
         }
 
 
         ReadStreamOptions options = ReadStreamOptions.get().fromEnd().backwards().maxCount(1);
 
-        ReadResult result = client.readStream(category.getEvents().get(0).getId(), options)
+        ReadResult result = client.readStream(category.getEvents().get(0).getStreamId(), options)
                 .get();
 
         RecordedEvent e = result.getEvents().get(0).getOriginalEvent();

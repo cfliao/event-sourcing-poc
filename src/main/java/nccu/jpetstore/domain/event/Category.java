@@ -36,7 +36,7 @@ public class Category {
     }
 
     private String getStreamId() {
-        return Category.class.getName() + "-" + categoryId;
+        return Category.class.getName() + "." + categoryId;
     }
 
     public String getName() {
@@ -62,7 +62,7 @@ public class Category {
         eventCache.add(event);
     }
 
-    private void mutate(DomainEvent event) {
+    public void mutate(DomainEvent event) {
         if (event instanceof EntityCreatedEvent) {
             // applyCreatedEvent((EntityCreatedEvent<Category>) event);
         } else if (event instanceof AttributeUpdatedEvent) {
