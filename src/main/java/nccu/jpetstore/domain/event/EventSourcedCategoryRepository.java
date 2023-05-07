@@ -1,9 +1,6 @@
 package nccu.jpetstore.domain.event;
 
-import com.eventstore.dbclient.EventData;
-
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class EventSourcedCategoryRepository {
 
@@ -30,7 +27,6 @@ public class EventSourcedCategoryRepository {
         String streamId = Category.class.getName() + "." + categoryId;
         List<DomainEvent> events = eventStore.getStream(streamId);
         Category category = new Category(categoryId);
-        category.reset();// avoid the first create event
 
         for (DomainEvent event : events) {
            // System.out.println("Mutate because of the event: " + event);
@@ -41,10 +37,10 @@ public class EventSourcedCategoryRepository {
     }
 
     public static void main(String[] args) {
-        EventStore eventStore = new EventStore("esdb://127.0.0.1:2113?tls=false&keepAliveTimeout=10000&keepAliveInterval=10000");
-        EventSourcedCategoryRepository repository = new EventSourcedCategoryRepository(eventStore);
-        Category category = repository.findBy("863d988c-bdd8-4206-9a38-fdda1a443a9c");
-        System.out.println(category);
+//        EventStore eventStore = new EventStore("esdb://127.0.0.1:2113?tls=false&keepAliveTimeout=10000&keepAliveInterval=10000");
+//        EventSourcedCategoryRepository repository = new EventSourcedCategoryRepository(eventStore);
+//        Category category = repository.findBy("863d988c-bdd8-4206-9a38-fdda1a443a9c");
+//        System.out.println(category);
     }
 
 }
