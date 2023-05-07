@@ -25,10 +25,17 @@ public class EventStore {
 //
 //    }
 
-    public void appendToStream(String streamId, DomainEvent e) throws ExecutionException, InterruptedException {
+    public String appendToStream(String streamId, DomainEvent e) throws ExecutionException, InterruptedException {
         EventData eventData = EventData.builderAsJson(e.getClass().getName(), e).build();
-        client.appendToStream(e.getStreamId(), eventData).get();
+        client.appendToStream(streamId, eventData).get();
+        return streamId;
     }
+
+    public List<String> findStreamIdByEntityType(String entityType){
+        return null;
+    }
+// 一開始建立event store類別時，應該要將stream id建一個cache?
+
 
 //    public List<ResolvedEvent> getStream(String streamId, int from, int to) {
 //        List<ResolvedEvent> results = new ArrayList<>();

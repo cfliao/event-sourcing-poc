@@ -4,7 +4,6 @@ public class TestCategory {
     public static void main(String[] args){
         Category category = new Category();
 
-       // category.setCategoryId("123");
         category.setName("456");
         category.setDescription("789");
 

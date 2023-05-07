@@ -18,14 +18,14 @@ public class Category {
         cause(new EntityCreatedEvent(getStreamId(), Category.class.getName(), new Date().getTime()));
     }
 
+    public Category(String categoryId){
+        eventCache = new ArrayList<>();
+        this.categoryId = categoryId;
+    }
+
     public String getCategoryId() {
         return categoryId;
     }
-
-//    public void setCategoryId(String categoryId) {
-//        AttributeUpdatedEvent event = generateAttributeUpdatedEvent("categoryId", categoryId);
-//        cause(event);
-//    }
 
     private AttributeUpdatedEvent generateAttributeUpdatedEvent(String key, Object value) {
         AttributeUpdatedEvent event =
